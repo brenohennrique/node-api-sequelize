@@ -1,6 +1,7 @@
 // dependencias
 import express from 'express'
 import './database'
+const debug = require('debug')('api:app')
 require('dotenv').config()
 
 // rotas
@@ -18,7 +19,7 @@ export class Server {
     this.setupConfig()
     this.setupRoutes()
 
-    this.app.listen(this.port)
+    this.app.listen(debug(`API listening on port ${this.port}!`))
   }
 
   setupRoutes() {
