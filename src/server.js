@@ -1,5 +1,6 @@
 // dependencias
 import express from 'express'
+import './database'
 require('dotenv').config()
 
 // rotas
