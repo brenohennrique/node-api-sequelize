@@ -19,7 +19,7 @@ export class Server {
     this.setupConfig()
     this.setupRoutes()
 
-    this.app.listen(debug(`API listening on port ${this.port}!`))
+    this.app.listen(this.port, () => debug(`Anna listening on port ${this.port}!`))
   }
 
   setupRoutes() {
