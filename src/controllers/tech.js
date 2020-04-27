@@ -1,0 +1,60 @@
+import Tech from '../models/Tech'
+import User from '../models/User'
+
+const TechController = {}
+
+TechController.store = async (req, res) => {
+  const { user_id } = req.params
+  const { name } = req.body
+
+  const user = await User.findByPk(user_id)
+
+  if (!user) {
+    return res.status(400).json({ error: 'User not found' })
+  }
+
+  const [ tech ] = await Tech.findOrCreate({
+    where: { name }
+  })
+
+  await user.addTech(tech)
+
+  return res.json(tech)
+}
+
+TechController.index = async (req, res) => {
+  const { user_id } = req.params
+
+  const user = await User.findByPk(user_id, {
+    include: {
+      association: 'techs',
+      attributes: ['name'],
+      through: {
+        attributes: []
+      }
+    }
+  })
+
+  return res.json(user.techs)
+}
+
+TechController.delete = async (req, res) => {
+  const { user_id } = req.params
+  const { name } = req.body
+
+  const user = await User.findByPk(user_id)
+
+  if (!user) {
+    return res.status(400).json({ error: 'User not found' })
+  }
+
+  const tech = await Tech.findOne({
+    where: { name }
+  })
+
+  await user.removeTech(tech)
+
+  return res.json()
+}
+
+export default TechController
